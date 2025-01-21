@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TravelBooking.Application.Commands;
+using TravelBooking.Common.Commands;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 

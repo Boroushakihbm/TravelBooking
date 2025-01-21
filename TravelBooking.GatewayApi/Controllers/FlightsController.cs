@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.Application.Commands;
-using TravelBooking.Application.Queries;
+using TravelBooking.Common.Commands;
+using TravelBooking.Common.Queries.Flight;
 using TravelBooking.Domain.Entities;
 
 namespace TravelBooking.GatewayApi.Controllers;
