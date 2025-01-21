@@ -7,9 +7,9 @@ namespace TravelBooking.Infrastructure.mssql.Repositories;
 
 public class FlightRepository : IFlightRepository
 {
-    private readonly TravelBookingContext _context;
+    private readonly TravelBookingDbContext _context;
 
-    public FlightRepository(TravelBookingContext context)
+    public FlightRepository(TravelBookingDbContext context)
     {
         _context = context;
     }
