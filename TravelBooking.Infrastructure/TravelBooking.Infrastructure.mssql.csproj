@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TravelBooking.Common\TravelBooking.Common.csproj" />
     <ProjectReference Include="..\TravelBooking.Domain\TravelBooking.Domain.csproj" />
   </ItemGroup>
 
