@@ -1,5 +1,4 @@
-﻿using MediatR;
-namespace TravelBooking.Common.Commands.Flight;
+﻿namespace TravelBooking.Common.Commands.Flight;
 
 public class CreateFlightCommand : IRequest<Domain.Entities.Flight>
 {

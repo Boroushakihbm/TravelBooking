@@ -14,22 +14,6 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Bookings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FlightId = table.Column<int>(type: "int", nullable: false),
-                    PassengerId = table.Column<int>(type: "int", nullable: false),
-                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SeatCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bookings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Flights",
                 columns: table => new
                 {
@@ -64,13 +48,32 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                     table.PrimaryKey("PK_Passengers", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Bookings",
-                columns: new[] { "Id", "BookingDate", "FlightId", "PassengerId", "SeatCount" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
                 {
-                    { 1, new DateTime(2025, 1, 22, 23, 36, 11, 448, DateTimeKind.Local).AddTicks(6779), 1, 1, 1 },
-                    { 2, new DateTime(2025, 1, 22, 23, 36, 11, 448, DateTimeKind.Local).AddTicks(7215), 2, 2, 1 }
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FlightId = table.Column<int>(type: "int", nullable: false),
+                    PassengerId = table.Column<int>(type: "int", nullable: false),
+                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SeatCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Flights_FlightId",
+                        column: x => x.FlightId,
+                        principalTable: "Flights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Passengers_PassengerId",
+                        column: x => x.PassengerId,
+                        principalTable: "Passengers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -78,8 +81,8 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                 columns: new[] { "Id", "ArrivalTime", "AvailableSeats", "DepartureTime", "Destination", "FlightNumber", "Origin", "Price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 23, 3, 36, 11, 447, DateTimeKind.Local).AddTicks(7728), 100, new DateTime(2025, 1, 23, 1, 36, 11, 446, DateTimeKind.Local).AddTicks(6253), "Mashhad", "AB123", "Tehran", 200.00m },
-                    { 2, new DateTime(2025, 1, 23, 6, 36, 11, 447, DateTimeKind.Local).AddTicks(8612), 150, new DateTime(2025, 1, 23, 4, 36, 11, 447, DateTimeKind.Local).AddTicks(8608), "Kish", "CD456", "Tehran", 300.00m }
+                    { 1, new DateTime(2025, 1, 23, 4, 34, 12, 647, DateTimeKind.Local).AddTicks(8693), 100, new DateTime(2025, 1, 23, 2, 34, 12, 646, DateTimeKind.Local).AddTicks(4968), "Mashhad", "AB123", "Tehran", 200.00m },
+                    { 2, new DateTime(2025, 1, 23, 7, 34, 12, 647, DateTimeKind.Local).AddTicks(9697), 150, new DateTime(2025, 1, 23, 5, 34, 12, 647, DateTimeKind.Local).AddTicks(9692), "Kish", "CD456", "Tehran", 300.00m }
                 });
 
             migrationBuilder.InsertData(
@@ -90,6 +93,25 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                     { 1, "test1@gmail.com", "Pooyan Boroushaki", "A1234567", "09356092381" },
                     { 2, "test2@gmail.com", "Saman Ahmadi", "B7654321", "09356092382" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Bookings",
+                columns: new[] { "Id", "BookingDate", "FlightId", "PassengerId", "SeatCount" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 1, 23, 0, 34, 12, 648, DateTimeKind.Local).AddTicks(8025), 1, 1, 1 },
+                    { 2, new DateTime(2025, 1, 23, 0, 34, 12, 648, DateTimeKind.Local).AddTicks(8463), 2, 2, 1 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_FlightId",
+                table: "Bookings",
+                column: "FlightId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_PassengerId",
+                table: "Bookings",
+                column: "PassengerId");
         }
 
         /// <inheritdoc />

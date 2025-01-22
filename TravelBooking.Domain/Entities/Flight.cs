@@ -9,4 +9,5 @@ public class Flight
     public DateTime ArrivalTime { get; set; }
     public int AvailableSeats { get; set; }
     public decimal Price { get; set; }
+    public virtual ICollection<Booking>? Bookings { get; set; }
 }
