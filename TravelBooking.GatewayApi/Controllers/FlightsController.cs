@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.Common.Commands;
+using TravelBooking.Common.Commands.Flight;
 using TravelBooking.Common.Queries.Flight;
 using TravelBooking.Domain.Entities;
 

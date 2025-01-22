@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using TravelBooking.Common.Queries.Flight;
-using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 
-namespace TravelBooking.Application.Handlers;
+namespace TravelBooking.Application.Handlers.Queries.Flight;
 
-public class GetFlightByIdHandler : IRequestHandler<GetFlightByIdQuery, Flight?>
+public class GetFlightByIdHandler : IRequestHandler<GetFlightByIdQuery, Domain.Entities.Flight?>
 {
     private readonly IFlightRepository _repository;
 
@@ -14,7 +13,7 @@ public class GetFlightByIdHandler : IRequestHandler<GetFlightByIdQuery, Flight?>
         _repository = repository;
     }
 
-    public async Task<Flight?> Handle(GetFlightByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Domain.Entities.Flight?> Handle(GetFlightByIdQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetByIdAsync(request.Id);
     }
