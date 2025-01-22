@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using TravelBooking.Common.Commands;
+using TravelBooking.Common.Commands.Flight;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 
-namespace TravelBooking.Application.Handlers;
+namespace TravelBooking.Application.Handlers.Commands.Flight;
 
-public class CreateFlightHandler : IRequestHandler<CreateFlightCommand, Flight>
+public class CreateFlightHandler : IRequestHandler<CreateFlightCommand, Domain.Entities.Flight>
 {
     private readonly IFlightRepository _repository;
 
@@ -14,9 +14,9 @@ public class CreateFlightHandler : IRequestHandler<CreateFlightCommand, Flight>
         _repository = repository;
     }
 
-    public async Task<Flight> Handle(CreateFlightCommand request, CancellationToken cancellationToken)
+    public async Task<Domain.Entities.Flight> Handle(CreateFlightCommand request, CancellationToken cancellationToken)
     {
-        var flight = new Flight
+        var flight = new Domain.Entities.Flight
         {
             FlightNumber = request.FlightNumber,
             Origin = request.Origin,

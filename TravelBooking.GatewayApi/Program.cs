@@ -5,7 +5,7 @@ using TravelBooking.Infrastructure.mssql.Repositories;
 using MediatR;
 using System.Reflection;
 using TravelBooking.GatewayApi.Configuration;
-using TravelBooking.Application.Handlers;
+using TravelBooking.Application.Handlers.Queries.Passenger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +19,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TravelBookingDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IFlightRepository, FlightRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 
-builder.Services.AddMediatR(typeof(GetFlightByIdHandler).GetTypeInfo().Assembly);
+builder.Services.AddMediatR(typeof(GetPassengerByIdHandler).GetTypeInfo().Assembly);
 
 var app = builder.Build();
 

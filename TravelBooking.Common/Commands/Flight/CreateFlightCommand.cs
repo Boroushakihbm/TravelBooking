@@ -1,9 +1,7 @@
 ﻿using MediatR;
-using TravelBooking.Domain.Entities;
+namespace TravelBooking.Common.Commands.Flight;
 
-namespace TravelBooking.Common.Commands;
-
-public class CreateFlightCommand : IRequest<Flight>
+public class CreateFlightCommand : IRequest<Domain.Entities.Flight>
 {
     public string FlightNumber { get; set; } = string.Empty;
     public string Origin { get; set; } = string.Empty;
