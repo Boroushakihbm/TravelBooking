@@ -2,7 +2,7 @@
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infrastructure.mssql.Persistence;
-
+using System.Linq.Expressions;
 namespace TravelBooking.Infrastructure.mssql.Repositories;
 
 public class FlightRepository : IFlightRepository
@@ -14,15 +14,9 @@ public class FlightRepository : IFlightRepository
         _context = context;
     }
 
-    public async Task<Flight?> GetByIdAsync(int id)
-    {
-        return await _context.Flights.FindAsync(id);
-    }
-
-    public async Task<IEnumerable<Flight>> GetAllAsync()
-    {
-        return await _context.Flights.ToListAsync();
-    }
+    public async Task<Flight?> GetByIdAsync(int id) => await _context.Flights.FindAsync(id);
+    
+    public async Task<IEnumerable<Flight>> GetAllAsync() => await _context.Flights.ToListAsync();
 
     public async Task AddAsync(Flight flight)
     {
@@ -46,8 +40,19 @@ public class FlightRepository : IFlightRepository
         }
     }
 
-    public async Task<Flight?> GetByFlightNumberAsync(string flightNumber)
+    public async Task<Flight?> GetByFlightNumberAsync(string flightNumber) =>
+    await _context.Flights.Where(flight => flight.FlightNumber.Equals(flightNumber)).FirstOrDefaultAsync();
+
+    public async Task<List<Flight>?> GetByFilterAsync(Expression<Func<Flight, bool>> filterFlight,
+                                                      int take,
+                                                      int skip)
     {
-        return await _context.Flights.Where(flight => flight.FlightNumber.Equals(flightNumber)).FirstOrDefaultAsync();
+        return await _context.Flights
+                .Where(filterFlight)
+                .AsNoTracking()
+                .Take(take)
+                .Skip(skip)
+                .ToListAsync();
     }
+    
 }
