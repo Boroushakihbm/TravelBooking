@@ -31,5 +31,12 @@ public class FlightsController : ControllerBase
         var flight = await _mediator.Send(command);
         return CreatedAtAction(nameof(Get), new { id = flight.Id }, flight);
     }
+
+    [HttpPut]
+    public async Task<ActionResult<Flight>> Update([FromBody] UpdateFlightAvailableSeatCommand command)
+    {
+        var update = await _mediator.Send(command);
+        return AcceptedAtAction(nameof(Get), new { id = update.Id }, update);
+    }
 }
 

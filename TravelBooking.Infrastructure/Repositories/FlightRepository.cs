@@ -45,4 +45,9 @@ public class FlightRepository : IFlightRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<Flight?> GetByFlightNumberAsync(string flightNumber)
+    {
+        return await _context.Flights.Where(flight => flight.FlightNumber.Equals(flightNumber)).FirstOrDefaultAsync();
+    }
 }
