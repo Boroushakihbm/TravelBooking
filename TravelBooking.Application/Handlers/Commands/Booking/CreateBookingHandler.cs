@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TravelBooking.Common.Commands.Booking;
-using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 
 namespace TravelBooking.Application.Handlers.Commands.Booking;
@@ -20,7 +19,7 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
         {
             BookingDate = request.BookingDate,
             FlightId = request.FlightId,
-            SeatNumber = request.SeatNumber,
+            SeatCount = request.SeatCount,
             PassengerId = request.PassengerId
         };
         await _repository.AddAsync(Booking);
