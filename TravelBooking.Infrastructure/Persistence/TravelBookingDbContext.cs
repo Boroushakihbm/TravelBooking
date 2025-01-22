@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Options;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Infrastructure.mssql.SeedsData;
 

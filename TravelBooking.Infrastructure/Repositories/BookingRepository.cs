@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infrastructure.mssql.Persistence;
@@ -44,5 +45,25 @@ public class BookingRepository : IBookingRepository
             _context.Bookings.Remove(Booking);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<IEnumerable<dynamic>> GetBookingsAsync(string flightNumber, int take, int skip)
+    {
+        var result = await (from booking in _context.Bookings
+                            join flight in _context.Flights on booking.FlightId equals flight.Id
+                            join passenger in _context.Passengers on booking.PassengerId equals passenger.Id
+                            where flight.FlightNumber == flightNumber
+                            select new 
+                            {
+                                Id = booking.Id,
+                                SeatCount = booking.SeatCount,
+                                Origin = flight.Origin,
+                                Destination = flight.Destination,
+                                DepartureTime = flight.DepartureTime,
+                                FullName = passenger.FullName,
+                                BookingDate = booking.BookingDate
+                            }).ToListAsync();
+
+        return result;
     }
 }

@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace TravelBooking.Common.Commands.Booking;
+﻿namespace TravelBooking.Common.Commands.Booking;
 
 public class CreateBookingCommand : IRequest<Domain.Entities.Booking>
 {

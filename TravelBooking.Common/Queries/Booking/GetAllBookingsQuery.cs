@@ -1,5 +1,10 @@
-﻿namespace TravelBooking.Common.Queries.Booking;
+﻿using TravelBooking.Common.DTOs.BokingDTOs;
 
-public class GetAllBookingsQuery
+namespace TravelBooking.Common.Queries.Booking;
+
+public class GetAllBookingsQuery: IRequest<IEnumerable<BookingDTO>?>
 {
+    public string? FlightNumber { get; set; }
+    public int take { get; set; } = 10;
+    public int skip { get; set; } = 0;
 }

@@ -12,7 +12,7 @@ using TravelBooking.Infrastructure.mssql.Persistence;
 namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
 {
     [DbContext(typeof(TravelBookingDbContext))]
-    [Migration("20250122200612_Init")]
+    [Migration("20250122210413_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -47,13 +47,17 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FlightId");
+
+                    b.HasIndex("PassengerId");
+
                     b.ToTable("Bookings");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            BookingDate = new DateTime(2025, 1, 22, 23, 36, 11, 448, DateTimeKind.Local).AddTicks(6779),
+                            BookingDate = new DateTime(2025, 1, 23, 0, 34, 12, 648, DateTimeKind.Local).AddTicks(8025),
                             FlightId = 1,
                             PassengerId = 1,
                             SeatCount = 1
@@ -61,7 +65,7 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            BookingDate = new DateTime(2025, 1, 22, 23, 36, 11, 448, DateTimeKind.Local).AddTicks(7215),
+                            BookingDate = new DateTime(2025, 1, 23, 0, 34, 12, 648, DateTimeKind.Local).AddTicks(8463),
                             FlightId = 2,
                             PassengerId = 2,
                             SeatCount = 1
@@ -108,9 +112,9 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2025, 1, 23, 3, 36, 11, 447, DateTimeKind.Local).AddTicks(7728),
+                            ArrivalTime = new DateTime(2025, 1, 23, 4, 34, 12, 647, DateTimeKind.Local).AddTicks(8693),
                             AvailableSeats = 100,
-                            DepartureTime = new DateTime(2025, 1, 23, 1, 36, 11, 446, DateTimeKind.Local).AddTicks(6253),
+                            DepartureTime = new DateTime(2025, 1, 23, 2, 34, 12, 646, DateTimeKind.Local).AddTicks(4968),
                             Destination = "Mashhad",
                             FlightNumber = "AB123",
                             Origin = "Tehran",
@@ -119,9 +123,9 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2025, 1, 23, 6, 36, 11, 447, DateTimeKind.Local).AddTicks(8612),
+                            ArrivalTime = new DateTime(2025, 1, 23, 7, 34, 12, 647, DateTimeKind.Local).AddTicks(9697),
                             AvailableSeats = 150,
-                            DepartureTime = new DateTime(2025, 1, 23, 4, 36, 11, 447, DateTimeKind.Local).AddTicks(8608),
+                            DepartureTime = new DateTime(2025, 1, 23, 5, 34, 12, 647, DateTimeKind.Local).AddTicks(9692),
                             Destination = "Kish",
                             FlightNumber = "CD456",
                             Origin = "Tehran",
@@ -173,6 +177,31 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                             PassportNumber = "B7654321",
                             PhoneNumber = "09356092382"
                         });
+                });
+
+            modelBuilder.Entity("TravelBooking.Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("TravelBooking.Domain.Entities.Flight", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TravelBooking.Domain.Entities.Passenger", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("PassengerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TravelBooking.Domain.Entities.Flight", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("TravelBooking.Domain.Entities.Passenger", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

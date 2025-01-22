@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Common.Commands.Booking;
 using TravelBooking.Common.Queries.Booking;
+using TravelBooking.Common.Queries.Flight;
 using TravelBooking.Domain.Entities;
 
 namespace TravelBooking.GatewayApi.Controllers;
@@ -23,6 +24,13 @@ public class BookingsController : ControllerBase
         var query = new GetBookingByIdQuery { Id = id };
         var Booking = await _mediator.Send(query);
         return Ok(Booking);
+    }
+
+    [HttpGet("/api/Booking/")]
+    public async Task<IActionResult> GetAll([FromQuery] GetAllBookingsQuery filterParam, CancellationToken cancellationToken)
+    {
+        var flight = await _mediator.Send(filterParam, cancellationToken);
+        return Ok(flight);
     }
 
     [HttpPost]
