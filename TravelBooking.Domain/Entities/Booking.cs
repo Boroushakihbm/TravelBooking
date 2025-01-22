@@ -6,5 +6,5 @@ public class Booking
     public int FlightId { get; set; }
     public int PassengerId { get; set; }
     public DateTime BookingDate { get; set; }
-    public string SeatNumber { get; set; } = string.Empty;
+    public int SeatCount { get; set; }
 }

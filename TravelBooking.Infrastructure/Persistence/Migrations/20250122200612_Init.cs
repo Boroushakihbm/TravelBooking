@@ -22,7 +22,7 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                     FlightId = table.Column<int>(type: "int", nullable: false),
                     PassengerId = table.Column<int>(type: "int", nullable: false),
                     BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SeatNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SeatCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,11 +66,11 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Bookings",
-                columns: new[] { "Id", "BookingDate", "FlightId", "PassengerId", "SeatNumber" },
+                columns: new[] { "Id", "BookingDate", "FlightId", "PassengerId", "SeatCount" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 22, 0, 2, 27, 953, DateTimeKind.Local).AddTicks(4828), 1, 1, "12A" },
-                    { 2, new DateTime(2025, 1, 22, 0, 2, 27, 953, DateTimeKind.Local).AddTicks(5412), 2, 2, "15B" }
+                    { 1, new DateTime(2025, 1, 22, 23, 36, 11, 448, DateTimeKind.Local).AddTicks(6779), 1, 1, 1 },
+                    { 2, new DateTime(2025, 1, 22, 23, 36, 11, 448, DateTimeKind.Local).AddTicks(7215), 2, 2, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -78,8 +78,8 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                 columns: new[] { "Id", "ArrivalTime", "AvailableSeats", "DepartureTime", "Destination", "FlightNumber", "Origin", "Price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 22, 4, 2, 27, 952, DateTimeKind.Local).AddTicks(2062), 100, new DateTime(2025, 1, 22, 2, 2, 27, 950, DateTimeKind.Local).AddTicks(7473), "Mashhad", "AB123", "Tehran", 200.00m },
-                    { 2, new DateTime(2025, 1, 22, 7, 2, 27, 952, DateTimeKind.Local).AddTicks(4182), 150, new DateTime(2025, 1, 22, 5, 2, 27, 952, DateTimeKind.Local).AddTicks(4177), "Kish", "CD456", "Tehran", 300.00m }
+                    { 1, new DateTime(2025, 1, 23, 3, 36, 11, 447, DateTimeKind.Local).AddTicks(7728), 100, new DateTime(2025, 1, 23, 1, 36, 11, 446, DateTimeKind.Local).AddTicks(6253), "Mashhad", "AB123", "Tehran", 200.00m },
+                    { 2, new DateTime(2025, 1, 23, 6, 36, 11, 447, DateTimeKind.Local).AddTicks(8612), 150, new DateTime(2025, 1, 23, 4, 36, 11, 447, DateTimeKind.Local).AddTicks(8608), "Kish", "CD456", "Tehran", 300.00m }
                 });
 
             migrationBuilder.InsertData(
