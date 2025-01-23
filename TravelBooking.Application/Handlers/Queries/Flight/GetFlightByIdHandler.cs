@@ -15,6 +15,6 @@ public class GetFlightByIdHandler : IRequestHandler<GetFlightByIdQuery, Domain.E
 
     public async Task<Domain.Entities.Flight?> Handle(GetFlightByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetByIdAsync(request.Id);
+        return await _repository.GetByIdAsync(request.Id!.Value);
     }
 }

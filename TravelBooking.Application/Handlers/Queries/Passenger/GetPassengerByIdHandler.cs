@@ -15,6 +15,6 @@ public class GetPassengerByIdHandler : IRequestHandler<GetPassengerByIdQuery, Do
 
     public async Task<Domain.Entities.Passenger?> Handle(GetPassengerByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetByIdAsync(request.Id);
+        return await _repository.GetByIdAsync(request.Id!.Value);
     }
 }
