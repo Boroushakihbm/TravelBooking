@@ -22,8 +22,8 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
 
     public async Task<Domain.Entities.Booking> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
-        var flight = _flightRepository.GetByIdAsync(request.FlightId);
-        var passenger = _passengerRepository.GetByIdAsync(request.PassengerId);
+        var flight = await _flightRepository.GetByIdAsync(request.FlightId);
+        var passenger = await _passengerRepository.GetByIdAsync(request.PassengerId);
 
         if (flight == null || passenger == null)
             throw new Exception("Flight or Passenger not found.");

@@ -24,7 +24,7 @@ public class PassengersController : ControllerBase
         var Passenger = await _mediator.Send(query);
         return Ok(Passenger);
     }
-
+    
     [HttpPost]
     public async Task<ActionResult<Passenger>> Create([FromBody] CreatePassengerCommand command)
     {
