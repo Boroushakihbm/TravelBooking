@@ -34,6 +34,10 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
             SeatCount = request.SeatCount,
             PassengerId = request.PassengerId
         };
+
+        flight.AvailableSeats = flight.AvailableSeats - request.SeatCount;
+
+        await _flightRepository.UpdateAsync(flight);
         await _bookingRepository.AddAsync(Booking);
         return Booking;
     }
