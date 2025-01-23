@@ -9,9 +9,8 @@ using TravelBooking.Application.Handlers.Queries.Passenger;
 using TravelBooking.Common.AutoMappers;
 using TravelBooking.Common.Commands.Passenger.Validators;
 using FluentValidation;
-using System;
-using TravelBooking.Common.Commands.Booking;
 using FluentValidation.AspNetCore;
+using TravelBooking.GatewayApi.Middlewaries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +35,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreatePassengerValidator>()
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidateModelFilter>();
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,5 +56,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.Run();
