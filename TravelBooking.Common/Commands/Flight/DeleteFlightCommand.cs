@@ -2,4 +2,5 @@
 
 public class DeleteFlightCommand
 {
+    public int Id { get; set; }
 }

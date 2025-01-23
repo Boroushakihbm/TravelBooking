@@ -2,4 +2,5 @@
 
 public class DeletePassengerCommand
 {
+    public int Id { get; set; }
 }
