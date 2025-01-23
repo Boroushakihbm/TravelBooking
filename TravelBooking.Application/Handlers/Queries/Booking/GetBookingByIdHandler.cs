@@ -15,6 +15,6 @@ public class GetBookingByIdHandler : IRequestHandler<GetBookingByIdQuery, Domain
 
     public async Task<Domain.Entities.Booking?> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetByIdAsync(request.Id);
+        return await _repository.GetByIdAsync(request.Id!.Value);
     }
 }
