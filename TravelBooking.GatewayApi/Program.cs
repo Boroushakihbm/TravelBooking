@@ -35,6 +35,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreatePassengerValidator>()
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidateModelFilter>();
