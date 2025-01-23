@@ -1,9 +1,15 @@
 ﻿namespace TravelBooking.Common.Commands.Passenger.Validators;
 
-public class CreatePassengerValidator : AbstractValidator<CreatePassengerCommand>
+public class UpdatePassengerValidator : AbstractValidator<UpdatePassengerCommand>
 {
-    public CreatePassengerValidator()
+    public UpdatePassengerValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id cannot be empty.")
+            .GreaterThan(0)
+            .WithMessage("Id is invalid.");
+
         RuleFor(x => x.FullName)
                     .NotEmpty()
                     .WithMessage("Full name cannot be empty.");

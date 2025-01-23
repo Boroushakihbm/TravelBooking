@@ -2,4 +2,5 @@
 
 public class DeleteBookingCommand
 {
+    public int Id { get; set; }
 }

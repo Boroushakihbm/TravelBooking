@@ -29,7 +29,7 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
 
         var Booking = new Domain.Entities.Booking
         {
-            BookingDate = request.BookingDate,
+            BookingDate = DateTime.Now,
             FlightId = request.FlightId,
             SeatCount = request.SeatCount,
             PassengerId = request.PassengerId
