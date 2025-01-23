@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TravelBooking.Common.Commands.Passenger;
-
-namespace TravelBooking.Common.Commands.Flight.Validators;
+﻿namespace TravelBooking.Common.Commands.Flight.Validators;
 
 public class CreateFlightValidator : AbstractValidator<CreateFlightCommand>
 {
@@ -13,12 +6,24 @@ public class CreateFlightValidator : AbstractValidator<CreateFlightCommand>
     {
         RuleFor(x => x.AvailableSeats)
             .NotEmpty()
-            .WithMessage("Id cannot be empty.")
+            .WithMessage("Available seats cannot be empty.")
             .GreaterThan(0)
-            .WithMessage("Id is invalid.");
+            .WithMessage("Available seats is invalid.");
 
         RuleFor(x => x.FlightNumber)
-                    .NotEmpty()
-                    .WithMessage("Flight number cannot be empty.");
+            .NotEmpty()
+            .WithMessage("Flight number cannot be empty.");
+
+        RuleFor(x => x.DepartureTime)
+            .NotEmpty()
+            .WithMessage("Departure time cannot be empty.");
+
+        RuleFor(x => x.ArrivalTime)
+            .NotEmpty()
+            .WithMessage("Arrival time cannot be empty.");
+
+        RuleFor(x => x.Price)
+            .NotEmpty()
+            .WithMessage("Price cannot be empty.");
     }
 }

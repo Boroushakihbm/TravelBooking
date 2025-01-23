@@ -6,9 +6,9 @@ public class UpdateFlightAvailableSeatValidator : AbstractValidator<UpdateFlight
     {
         RuleFor(x => x.AvailableSeats)
             .NotEmpty()
-            .WithMessage("Id cannot be empty.")
+            .WithMessage("Available seats cannot be empty.")
             .GreaterThan(0)
-            .WithMessage("Id is invalid.");
+            .WithMessage("Available seats is invalid.");
 
         RuleFor(x => x.FlightNumber)
                     .NotEmpty()
