@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Threading;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infrastructure.mssql.Persistence;
@@ -15,19 +16,19 @@ public class BookingRepository : IBookingRepository
         _context = context;
     }
 
-    public async Task<Booking?> GetByIdAsync(int id)
+    public async Task<Booking> GetByIdAsync(int id)
     {
-        return await _context.Bookings.FindAsync(id);
+        return await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new InvalidOperationException("Booking not found");
     }
 
     public async Task<IEnumerable<Booking>> GetAllAsync()
     {
-        return await _context.Bookings.ToListAsync();
+        return await _context.Bookings.AsNoTracking().ToListAsync();
     }
 
     public async Task AddAsync(Booking Booking)
     {
-        _context.Bookings.Add(Booking);
+        await _context.Bookings.AddAsync(Booking);
         await _context.SaveChangesAsync();
     }
 
