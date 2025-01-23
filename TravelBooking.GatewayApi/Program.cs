@@ -6,6 +6,7 @@ using MediatR;
 using System.Reflection;
 using TravelBooking.GatewayApi.Configuration;
 using TravelBooking.Application.Handlers.Queries.Passenger;
+using TravelBooking.Common.AutoMappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 
 builder.Services.AddMediatR(typeof(GetPassengerByIdHandler).GetTypeInfo().Assembly);
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
 
