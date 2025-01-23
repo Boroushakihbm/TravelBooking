@@ -7,6 +7,11 @@ using System.Reflection;
 using TravelBooking.GatewayApi.Configuration;
 using TravelBooking.Application.Handlers.Queries.Passenger;
 using TravelBooking.Common.AutoMappers;
+using TravelBooking.Common.Commands.Passenger.Validators;
+using FluentValidation;
+using System;
+using TravelBooking.Common.Commands.Booking;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +31,10 @@ builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 builder.Services.AddMediatR(typeof(GetPassengerByIdHandler).GetTypeInfo().Assembly);
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreatePassengerValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 
 var app = builder.Build();
 

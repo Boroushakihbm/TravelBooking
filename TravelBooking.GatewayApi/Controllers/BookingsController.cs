@@ -26,7 +26,7 @@ public class BookingsController : ControllerBase
         return Ok(Booking);
     }
 
-    [HttpGet("/api/Booking/")]
+    [HttpGet("/api/Bookings/")]
     public async Task<IActionResult> GetAll([FromQuery] GetAllBookingsQuery filterParam, CancellationToken cancellationToken)
     {
         var flight = await _mediator.Send(filterParam, cancellationToken);
