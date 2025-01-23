@@ -14,9 +14,9 @@ public class PassengerRepository : IPassengerRepository
         _context = context;
     }
 
-    public async Task<Passenger?> GetByIdAsync(int id)
+    public async Task<Passenger> GetByIdAsync(int id)
     {
-        return await _context.Passengers.FindAsync(id);
+        return await _context.Passengers.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new InvalidOperationException("Passenger not found");
     }
 
     public async Task<IEnumerable<Passenger>> GetAllAsync()
