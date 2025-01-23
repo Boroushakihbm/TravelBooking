@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  travelbooking-api:
+    build:
+      context: .
+      dockerfile: TravelBooking.GatewayApi/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TravelBookingDb;User=sa;Password=Your_password123;
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+
+volumes:
+  sqlserverdata:
