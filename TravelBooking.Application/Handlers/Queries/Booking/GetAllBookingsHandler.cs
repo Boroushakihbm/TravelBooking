@@ -17,7 +17,6 @@ public class GetAllBookingsHandler : IRequestHandler<GetAllBookingsQuery, IEnume
         _mapper = mapper;
     }
 
-
     public async Task<IEnumerable<BookingDTO>?> Handle(GetAllBookingsQuery request, CancellationToken cancellationToken)
     {
         var dynamicList = await _repository.GetBookingsAsync(request.FlightNumber ?? string.Empty, request.take, request.skip);
