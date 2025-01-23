@@ -10,9 +10,9 @@ public class UpdateBookingValidator : AbstractValidator<UpdateBookingCommand>
 
         RuleFor(x => x.PassengerId)
             .NotEmpty()
-            .WithMessage("Id cannot be empty.")
+            .WithMessage("Passenger Id cannot be empty.")
             .GreaterThan(0)
-            .WithMessage("Id is invalid.");
+            .WithMessage("Passenger Id is invalid.");
 
         RuleFor(x => x.SeatCount)
                     .NotEmpty()
