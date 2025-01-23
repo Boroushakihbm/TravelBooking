@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using TravelBooking.Common.Commands.Booking;
+using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
+using TravelBooking.Infrastructure.mssql.Repositories;
 
 namespace TravelBooking.Application.Handlers.Commands.Booking;
 
@@ -8,13 +10,24 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
 {
     private readonly IBookingRepository _repository;
 
-    public CreateBookingHandler(IBookingRepository repository)
+    private readonly IFlightRepository _flightRepository;
+    private readonly IPassengerRepository _passengerRepository;
+
+    public CreateBookingHandler(IFlightRepository flightRepository, 
+                                IPassengerRepository passengerRepository)
     {
-        _repository = repository;
+        _flightRepository = flightRepository;
+        _passengerRepository = passengerRepository;
     }
 
     public async Task<Domain.Entities.Booking> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
+        var flight = _flightRepository.GetByIdAsync(request.FlightId);
+        var passenger = _passengerRepository.GetByIdAsync(request.PassengerId);
+
+        if (flight == null || passenger == null)
+            throw new Exception("Flight or Passenger not found.");
+
         var Booking = new Domain.Entities.Booking
         {
             BookingDate = request.BookingDate,
