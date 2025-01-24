@@ -1,17 +1,20 @@
 version: '3.8'
 
 services:
-  travelbooking-api:
+  gatewayapi:
+    image: travelbooking-gatewayapi
     build:
       context: .
       dockerfile: TravelBooking.GatewayApi/Dockerfile
     ports:
-      - "5000:80"
+      - "8080:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TravelBookingDb;User=sa;Password=Your_password123;
+      - RabbitMQ__Host=rabbitmq
     depends_on:
       - sqlserver
+      - rabbitmq
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -20,8 +23,13 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
-    volumes:
-      - sqlserverdata:/var/opt/mssql
 
-volumes:
-  sqlserverdata:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+networks:
+  default:
+    name: travelbooking-network
