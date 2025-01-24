@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using MassTransit;
+using Moq;
 using TravelBooking.Application.Handlers.Commands.Booking;
 using TravelBooking.Common.Commands.Booking;
 using TravelBooking.Domain.Entities;
@@ -8,6 +9,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
 {
     public class CreateBookingHandlerTests
     {
+        private readonly Mock<IBus> _busMock;
         private readonly Mock<IBookingRepository> _bookingRepositoryMock;
         private readonly Mock<IFlightRepository> _flightRepositoryMock;
         private readonly Mock<IPassengerRepository> _passengerRepositoryMock;
@@ -18,7 +20,8 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             _bookingRepositoryMock = new Mock<IBookingRepository>();
             _flightRepositoryMock = new Mock<IFlightRepository>();
             _passengerRepositoryMock = new Mock<IPassengerRepository>();
-            _handler = new CreateBookingHandler(_bookingRepositoryMock.Object, _flightRepositoryMock.Object, _passengerRepositoryMock.Object);
+            _busMock = new Mock<IBus>();
+            _handler = new CreateBookingHandler(_flightRepositoryMock.Object, _passengerRepositoryMock.Object, _busMock.Object);
         }
 
         [Fact]
@@ -54,7 +57,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
 
             var booking = new Booking
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 FlightId = command.FlightId,
                 PassengerId = command.PassengerId,
                 BookingDate = DateTime.Now,
@@ -73,7 +76,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
             _bookingRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Booking>()), Times.Once);
             Assert.NotNull(result);
-            Assert.True(result.Id > 0);
+            Assert.NotNull(result?.Id);
         }
 
         [Fact]
