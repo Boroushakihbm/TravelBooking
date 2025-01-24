@@ -1,8 +1,9 @@
 ﻿using TravelBooking.Domain.Events;
+using TravelBooking.Domain.IRepository;
 
 namespace TravelBooking.Domain.Entities;
 
-public class Booking
+public class Booking: IRootEntity
 {
     public int Id { get; set; }
     public int FlightId { get; set; }

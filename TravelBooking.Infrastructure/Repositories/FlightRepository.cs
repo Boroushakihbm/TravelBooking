@@ -3,18 +3,17 @@ using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infrastructure.mssql.Persistence;
 using Microsoft.Extensions.Caching.Memory;
+using AutoMapper;
 
 namespace TravelBooking.Infrastructure.mssql.Repositories;
 
-public class FlightRepository : IFlightRepository
+public class FlightRepository : GenericRepository<Flight>, IFlightRepository
 {
-    private readonly TravelBookingDbContext _context;
     private readonly IMemoryCache _cache;
     private readonly MemoryCacheEntryOptions _cacheOptions;
 
-    public FlightRepository(TravelBookingDbContext context, IMemoryCache cache)
+    public FlightRepository(TravelBookingDbContext context, IMemoryCache cache, IMapper mapper) : base(context, mapper)
     {
-        _context = context;
         _cache = cache;
         _cacheOptions = new MemoryCacheEntryOptions
         {
@@ -23,7 +22,7 @@ public class FlightRepository : IFlightRepository
         };
     }
 
-    public async Task<Flight?> GetByIdAsync(int id)
+    public virtual async Task<Flight?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         if (!_cache.TryGetValue($"Flight_{id}", out Flight? flight))
         {
@@ -36,7 +35,7 @@ public class FlightRepository : IFlightRepository
         return flight ?? throw new KeyNotFoundException("Flight not found");
     }
 
-    public async Task<IEnumerable<Flight>> GetAllAsync()
+    public async Task<IEnumerable<Flight>?> GetAllAsync(CancellationToken cancellationToken = default)
     {
         if (!_cache.TryGetValue("AllFlights", out IEnumerable<Flight>? flights))
         {
@@ -46,14 +45,14 @@ public class FlightRepository : IFlightRepository
         return flights ?? Enumerable.Empty<Flight>();
     }
 
-    public async Task AddAsync(Flight flight)
+    public async Task AddAsync(Flight flight, CancellationToken cancellationToken = default)
     {
         _context.Flights.Add(flight);
         await _context.SaveChangesAsync();
         _cache.Remove("AllFlights");
     }
 
-    public async Task UpdateAsync(Flight flight)
+    public async Task UpdateAsync(Flight flight, CancellationToken cancellationToken = default)
     {
         _context.Flights.Update(flight);
         await _context.SaveChangesAsync();
@@ -61,7 +60,7 @@ public class FlightRepository : IFlightRepository
         _cache.Remove("AllFlights");
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         var flight = await _context.Flights.FindAsync(id);
         if (flight != null)
@@ -73,7 +72,7 @@ public class FlightRepository : IFlightRepository
         }
     }
 
-    public async Task<Flight?> GetByFlightNumberAsync(string flightNumber)
+    public async Task<Flight?> GetByFlightNumberAsync(string flightNumber, CancellationToken cancellationToken = default)
     {
         if (!_cache.TryGetValue($"FlightNumber_{flightNumber}", out Flight? flight))
         {
@@ -86,7 +85,7 @@ public class FlightRepository : IFlightRepository
         return flight;
     }
 
-    public async Task<List<Flight>?> GetByFilterAsync(Func<Flight, bool> filterFlight, int take, int skip)
+    public async Task<List<Flight>?> GetByFilterAsync(Func<Flight, bool> filterFlight, int take, int skip, CancellationToken cancellationToken = default)
     {
         if (!_cache.TryGetValue("AllFlights", out IEnumerable<Flight>? flights))
         {
