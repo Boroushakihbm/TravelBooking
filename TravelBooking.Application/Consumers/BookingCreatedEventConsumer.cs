@@ -43,6 +43,13 @@ namespace TravelBooking.Application.Consumers
 
             await _flightRepository.UpdateAsync(flight);
             await _bookingRepository.AddAsync(booking);
+
+            await context.RespondAsync(new CreateBookingResponse
+            {
+                Success = true,
+                Message = "Booking created successfully",
+                BookingId = booking.Id
+            });
         }
     }
 
