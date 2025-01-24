@@ -39,15 +39,15 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.FlightTests
                 Price = 299.99M
             };
 
-            _flightRepositoryMock.Setup(x => x.GetByFlightNumberAsync(command.FlightNumber)).ReturnsAsync(flight);
-            _flightRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<Flight>())).Returns(Task.CompletedTask);
+            _flightRepositoryMock.Setup(x => x.GetByFlightNumberAsync(command.FlightNumber, CancellationToken.None)).ReturnsAsync(flight);
+            _flightRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<Flight>(), CancellationToken.None)).Returns(Task.CompletedTask);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _flightRepositoryMock.Verify(x => x.GetByFlightNumberAsync(command.FlightNumber), Times.Once);
-            _flightRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Flight>()), Times.Once);
+            _flightRepositoryMock.Verify(x => x.GetByFlightNumberAsync(command.FlightNumber, CancellationToken.None), Times.Once);
+            _flightRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Flight>(), CancellationToken.None), Times.Once);
             Assert.NotNull(result);
             Assert.Equal(command.AvailableSeats, result.AvailableSeats);
         }
@@ -62,12 +62,12 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.FlightTests
                 AvailableSeats = 50
             };
 
-            _flightRepositoryMock.Setup(x => x.GetByFlightNumberAsync(command.FlightNumber)).ReturnsAsync((Flight)null);
+            _flightRepositoryMock.Setup(x => x.GetByFlightNumberAsync(command.FlightNumber, CancellationToken.None)).ReturnsAsync((Flight)null);
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
-            _flightRepositoryMock.Verify(x => x.GetByFlightNumberAsync(command.FlightNumber), Times.Once);
-            _flightRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Flight>()), Times.Never);
+            _flightRepositoryMock.Verify(x => x.GetByFlightNumberAsync(command.FlightNumber, CancellationToken.None), Times.Once);
+            _flightRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Flight>(), CancellationToken.None), Times.Never);
         }
     }
 }
