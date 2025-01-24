@@ -5,22 +5,23 @@ using TravelBooking.Common.Commands.Booking;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Events;
 using TravelBooking.Domain.Interfaces;
+using Xunit;
 
 namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
 {
     public class CreateBookingHandlerTests
     {
-        private readonly Mock<IBus> _busMock;
         private readonly Mock<IFlightRepository> _flightRepositoryMock;
         private readonly Mock<IPassengerRepository> _passengerRepositoryMock;
+        private readonly Mock<IRequestClient<BookingCreatedEvent>> _clientMock;
         private readonly CreateBookingHandler _handler;
 
         public CreateBookingHandlerTests()
         {
             _flightRepositoryMock = new Mock<IFlightRepository>();
             _passengerRepositoryMock = new Mock<IPassengerRepository>();
-            _busMock = new Mock<IBus>();
-            _handler = new CreateBookingHandler(_flightRepositoryMock.Object, _passengerRepositoryMock.Object, _busMock.Object);
+            _clientMock = new Mock<IRequestClient<BookingCreatedEvent>>();
+            _handler = new CreateBookingHandler(_flightRepositoryMock.Object, _passengerRepositoryMock.Object, _clientMock.Object);
         }
 
         [Fact]
@@ -56,7 +57,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
 
             var booking = new Booking
             {
-                Id = Guid.NewGuid(),
+                Id = 0,
                 FlightId = command.FlightId,
                 PassengerId = command.PassengerId,
                 BookingDate = DateTime.Now,
@@ -65,6 +66,8 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
 
             _flightRepositoryMock.Setup(x => x.GetByIdAsync(command.FlightId)).ReturnsAsync(flight);
             _passengerRepositoryMock.Setup(x => x.GetByIdAsync(command.PassengerId)).ReturnsAsync(passenger);
+            _clientMock.Setup(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)))
+                       .ReturnsAsync(Mock.Of<Response<BookingCreatedEventResponse>>);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -72,7 +75,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             // Assert
             _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _busMock.Verify(x => x.Publish(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>()), Times.Once);
+            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Never);
             Assert.NotNull(result);
             Assert.Equal(command.FlightId, result.FlightId);
             Assert.Equal(command.PassengerId, result.PassengerId);
@@ -97,7 +100,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
             _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _busMock.Verify(x => x.Publish(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>()), Times.Never);
+            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Never);
         }
 
         [Fact]
@@ -138,7 +141,8 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
             _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _busMock.Verify(x => x.Publish(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>()), Times.Never);
+            _clientMock.Setup(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)))
+                       .ReturnsAsync(Mock.Of<Response<BookingCreatedEventResponse>>);
         }
     }
 }

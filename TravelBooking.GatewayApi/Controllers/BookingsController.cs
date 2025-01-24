@@ -20,7 +20,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Booking>> Get(Guid id)
+    public async Task<ActionResult<Booking>> Get(int id)
     {
         var query = new GetBookingByIdQuery { Id = id };
         var Booking = await _mediator.Send(query);

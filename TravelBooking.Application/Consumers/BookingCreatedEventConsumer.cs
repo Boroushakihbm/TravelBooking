@@ -44,7 +44,7 @@ namespace TravelBooking.Application.Consumers
             await _flightRepository.UpdateAsync(flight);
             await _bookingRepository.AddAsync(booking);
 
-            await context.RespondAsync(new CreateBookingResponse
+            await context.RespondAsync(new BookingCreatedEventResponse
             {
                 Success = true,
                 Message = "Booking created successfully",
