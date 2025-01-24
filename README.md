@@ -21,7 +21,7 @@ TravelBooking is a .NET 8.0 based application for managing travel bookings. This
 ![BadRequest Sample](https://github.com/Boroushakihbm/TravelBooking/blob/master/readmeimg/BadRequest.PNG)
 ## Unit tests for critical functionalities
 ![xUnitTest](https://github.com/Boroushakihbm/TravelBooking/blob/master/readmeimg/xUnitTest.PNG)
-## Event Sourcing to track changes in flights by RabbitMQ 
+## Event Sourcing to track changes in flights by MassTransit and RabbitMQ 
 ![RabbitMQ](https://github.com/Boroushakihbm/TravelBooking/blob/master/readmeimg/RabbitMQ.PNG)
 ## Setup Instructions
 
