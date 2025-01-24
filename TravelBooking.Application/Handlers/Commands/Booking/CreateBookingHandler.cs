@@ -10,17 +10,14 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
 {
     private readonly IFlightRepository _flightRepository;
     private readonly IPassengerRepository _passengerRepository;
-    private readonly IBus _bus;
     private readonly IRequestClient<BookingCreatedEvent> _client;
 
     public CreateBookingHandler(IFlightRepository flightRepository, 
                                 IPassengerRepository passengerRepository,
-                                IBus bus,
                                 IRequestClient<BookingCreatedEvent> client)
     {
         _flightRepository = flightRepository;
         _passengerRepository = passengerRepository;
-        _bus = bus;
         _client = client;
     }
    
@@ -36,8 +33,8 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
             throw new Exception("Flight Not Available Seat.");
 
         var bookingCreated = Domain.Entities.Booking.Create(request.FlightId, request.PassengerId, DateTime.Now, request.SeatCount);
-        var response = await _client.GetResponse<CreateBookingResponse>(bookingCreated.Item2);
-
+        var response = await _client.GetResponse<BookingCreatedEventResponse>(bookingCreated.Item2);
+        bookingCreated.Item1.Id = response.Message.BookingId;
         return bookingCreated.Item1;
     }
 }

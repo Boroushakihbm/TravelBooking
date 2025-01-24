@@ -12,7 +12,7 @@ using TravelBooking.Infrastructure.mssql.Persistence;
 namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
 {
     [DbContext(typeof(TravelBookingDbContext))]
-    [Migration("20250124092840_Init")]
+    [Migration("20250124124423_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -27,9 +27,11 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
 
             modelBuilder.Entity("TravelBooking.Domain.Entities.Booking", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
@@ -54,16 +56,16 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("16e455a4-5600-49a5-8df8-f88a579626d1"),
-                            BookingDate = new DateTime(2025, 1, 24, 12, 58, 39, 246, DateTimeKind.Local).AddTicks(389),
+                            Id = 1,
+                            BookingDate = new DateTime(2025, 1, 24, 16, 14, 22, 384, DateTimeKind.Local).AddTicks(1610),
                             FlightId = 1,
                             PassengerId = 1,
                             SeatCount = 1
                         },
                         new
                         {
-                            Id = new Guid("e0f90fcd-3b65-4526-b22f-056b2f0cc3bf"),
-                            BookingDate = new DateTime(2025, 1, 24, 12, 58, 39, 246, DateTimeKind.Local).AddTicks(861),
+                            Id = 2,
+                            BookingDate = new DateTime(2025, 1, 24, 16, 14, 22, 384, DateTimeKind.Local).AddTicks(2649),
                             FlightId = 2,
                             PassengerId = 2,
                             SeatCount = 1
@@ -110,9 +112,9 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2025, 1, 24, 16, 58, 39, 245, DateTimeKind.Local).AddTicks(192),
+                            ArrivalTime = new DateTime(2025, 1, 24, 20, 14, 22, 382, DateTimeKind.Local).AddTicks(7038),
                             AvailableSeats = 100,
-                            DepartureTime = new DateTime(2025, 1, 24, 14, 58, 39, 243, DateTimeKind.Local).AddTicks(7124),
+                            DepartureTime = new DateTime(2025, 1, 24, 18, 14, 22, 381, DateTimeKind.Local).AddTicks(800),
                             Destination = "Mashhad",
                             FlightNumber = "AB123",
                             Origin = "Tehran",
@@ -121,9 +123,9 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2025, 1, 24, 19, 58, 39, 245, DateTimeKind.Local).AddTicks(1129),
+                            ArrivalTime = new DateTime(2025, 1, 24, 23, 14, 22, 382, DateTimeKind.Local).AddTicks(8646),
                             AvailableSeats = 150,
-                            DepartureTime = new DateTime(2025, 1, 24, 17, 58, 39, 245, DateTimeKind.Local).AddTicks(1124),
+                            DepartureTime = new DateTime(2025, 1, 24, 21, 14, 22, 382, DateTimeKind.Local).AddTicks(8641),
                             Destination = "Kish",
                             FlightNumber = "CD456",
                             Origin = "Tehran",

@@ -4,7 +4,7 @@ namespace TravelBooking.Domain.Entities;
 
 public class Booking
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public int FlightId { get; set; }
     public int PassengerId { get; set; }
     public DateTime BookingDate { get; set; }
@@ -12,7 +12,7 @@ public class Booking
 
     public Booking() { }
 
-    public Booking(Guid id, int flightId, int passengerId, DateTime bookingDate, int seatCount)
+    public Booking(int id, int flightId, int passengerId, DateTime bookingDate, int seatCount)
     {
         Id = id;
         FlightId = flightId;
@@ -22,7 +22,7 @@ public class Booking
     }
     public static Tuple<Booking, BookingCreatedEvent> Create(int flightId, int passengerId, DateTime bookingDate, int seatCount)
     {
-        var id = Guid.NewGuid();
+        var id = 0;
         var booking = new Booking(id, flightId, passengerId, bookingDate, seatCount);
         var @event = new BookingCreatedEvent(id, flightId, passengerId, bookingDate, seatCount);
 

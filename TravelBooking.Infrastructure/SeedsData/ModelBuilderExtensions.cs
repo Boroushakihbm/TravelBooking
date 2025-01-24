@@ -21,8 +21,8 @@ public static class ModelBuilderExtensions
 
         // Seed data for Bookings
         modelBuilder.Entity<Booking>().HasData(
-            new Booking { Id = Guid.NewGuid(), FlightId = 1, PassengerId = 1, BookingDate = DateTime.Now, SeatCount = 1 },
-            new Booking { Id = Guid.NewGuid(), FlightId = 2, PassengerId = 2, BookingDate = DateTime.Now, SeatCount = 1 }
+            new Booking { Id = 1, FlightId = 1, PassengerId = 1, BookingDate = DateTime.Now, SeatCount = 1 },
+            new Booking { Id = 2, FlightId = 2, PassengerId = 2, BookingDate = DateTime.Now, SeatCount = 1 }
         );
     }
 }

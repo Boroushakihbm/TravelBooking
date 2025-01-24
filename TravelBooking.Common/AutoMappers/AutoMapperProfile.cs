@@ -8,7 +8,7 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<dynamic, BookingDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom((src, dest) => ConvertToNullableGuid(src, "Id")))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom((src, dest) => ConvertToNullableInt(src, "Id")))
             .ForMember(dest => dest.SeatCount, opt => opt.MapFrom((src, dest) => ConvertToNullableInt(src, "SeatCount")))
             .ForMember(dest => dest.Origin, opt => opt.MapFrom((src, dest) => ConvertToNullableString(src, "Origin")))
             .ForMember(dest => dest.Destination, opt => opt.MapFrom((src, dest) => ConvertToNullableString(src, "Destination")))
