@@ -16,7 +16,7 @@ public class BookingRepository : IBookingRepository
         _context = context;
     }
 
-    public async Task<Booking> GetByIdAsync(int id)
+    public async Task<Booking> GetByIdAsync(Guid id)
     {
         return await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new InvalidOperationException("Booking not found");
     }

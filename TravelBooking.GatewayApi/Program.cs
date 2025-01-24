@@ -11,7 +11,8 @@ using TravelBooking.Common.Commands.Passenger.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using TravelBooking.GatewayApi.Middlewaries;
-
+using MassTransit;
+using TravelBooking.Application.Consumers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -41,6 +42,22 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidateModelFilter>();
 });
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<BookingCreatedEventConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost");
+        cfg.ReceiveEndpoint("booking_queue", e =>
+        {
+            e.ConfigureConsumer<BookingCreatedEventConsumer>(context);
+        });
+    });
+});
+
+
 
 var app = builder.Build();
 

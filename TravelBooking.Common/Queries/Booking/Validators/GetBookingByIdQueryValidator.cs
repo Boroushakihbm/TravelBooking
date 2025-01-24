@@ -6,8 +6,6 @@ public class GetBookingByIdQueryValidator : AbstractValidator<GetBookingByIdQuer
     {
         RuleFor(x => x.Id)
             .NotNull()
-            .WithMessage("Booking ID must be provided.")
-            .GreaterThan(0)
-            .WithMessage("Booking ID must be greater than zero.");
+            .WithMessage("Booking ID must be provided.");
     }
 }

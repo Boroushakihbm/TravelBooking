@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Common.Commands.Booking;
 using TravelBooking.Common.Queries.Booking;
-using TravelBooking.Common.Queries.Flight;
 using TravelBooking.Domain.Entities;
 
 namespace TravelBooking.GatewayApi.Controllers;
@@ -12,14 +12,15 @@ namespace TravelBooking.GatewayApi.Controllers;
 public class BookingsController : ControllerBase
 {
     private readonly IMediator _mediator;
-
-    public BookingsController(IMediator mediator)
+    private readonly IBus _bus;
+    public BookingsController(IMediator mediator, IBus bus)
     {
         _mediator = mediator;
+        _bus = bus;
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Booking>> Get(int id)
+    public async Task<ActionResult<Booking>> Get(Guid id)
     {
         var query = new GetBookingByIdQuery { Id = id };
         var Booking = await _mediator.Send(query);

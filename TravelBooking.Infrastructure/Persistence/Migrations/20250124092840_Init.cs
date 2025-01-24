@@ -52,8 +52,7 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                 name: "Bookings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FlightId = table.Column<int>(type: "int", nullable: false),
                     PassengerId = table.Column<int>(type: "int", nullable: false),
                     BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -81,8 +80,8 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                 columns: new[] { "Id", "ArrivalTime", "AvailableSeats", "DepartureTime", "Destination", "FlightNumber", "Origin", "Price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 23, 4, 34, 12, 647, DateTimeKind.Local).AddTicks(8693), 100, new DateTime(2025, 1, 23, 2, 34, 12, 646, DateTimeKind.Local).AddTicks(4968), "Mashhad", "AB123", "Tehran", 200.00m },
-                    { 2, new DateTime(2025, 1, 23, 7, 34, 12, 647, DateTimeKind.Local).AddTicks(9697), 150, new DateTime(2025, 1, 23, 5, 34, 12, 647, DateTimeKind.Local).AddTicks(9692), "Kish", "CD456", "Tehran", 300.00m }
+                    { 1, new DateTime(2025, 1, 24, 16, 58, 39, 245, DateTimeKind.Local).AddTicks(192), 100, new DateTime(2025, 1, 24, 14, 58, 39, 243, DateTimeKind.Local).AddTicks(7124), "Mashhad", "AB123", "Tehran", 200.00m },
+                    { 2, new DateTime(2025, 1, 24, 19, 58, 39, 245, DateTimeKind.Local).AddTicks(1129), 150, new DateTime(2025, 1, 24, 17, 58, 39, 245, DateTimeKind.Local).AddTicks(1124), "Kish", "CD456", "Tehran", 300.00m }
                 });
 
             migrationBuilder.InsertData(
@@ -99,8 +98,8 @@ namespace TravelBooking.Infrastructure.mssql.Persistence.Migrations
                 columns: new[] { "Id", "BookingDate", "FlightId", "PassengerId", "SeatCount" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 23, 0, 34, 12, 648, DateTimeKind.Local).AddTicks(8025), 1, 1, 1 },
-                    { 2, new DateTime(2025, 1, 23, 0, 34, 12, 648, DateTimeKind.Local).AddTicks(8463), 2, 2, 1 }
+                    { new Guid("16e455a4-5600-49a5-8df8-f88a579626d1"), new DateTime(2025, 1, 24, 12, 58, 39, 246, DateTimeKind.Local).AddTicks(389), 1, 1, 1 },
+                    { new Guid("e0f90fcd-3b65-4526-b22f-056b2f0cc3bf"), new DateTime(2025, 1, 24, 12, 58, 39, 246, DateTimeKind.Local).AddTicks(861), 2, 2, 1 }
                 });
 
             migrationBuilder.CreateIndex(
