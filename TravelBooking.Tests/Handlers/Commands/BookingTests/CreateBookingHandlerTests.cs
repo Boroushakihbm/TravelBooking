@@ -69,14 +69,14 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             _clientMock.Setup(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)))
                        .ReturnsAsync(Mock.Of<Response<BookingCreatedEventResponse>>);
 
+
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Never);
-            Assert.NotNull(result);
+            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
             Assert.Equal(command.FlightId, result.FlightId);
             Assert.Equal(command.PassengerId, result.PassengerId);
             Assert.Equal(command.SeatCount, result.SeatCount);
@@ -88,7 +88,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             // Arrange
             var command = new CreateBookingCommand
             {
-                FlightId = 1,
+                FlightId = 400,
                 PassengerId = 1,
                 SeatCount = 2
             };
@@ -100,7 +100,7 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
             _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Never);
+            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
         }
 
         [Fact]
@@ -141,8 +141,28 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
             _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
             _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _clientMock.Setup(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)))
-                       .ReturnsAsync(Mock.Of<Response<BookingCreatedEventResponse>>);
+            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(0, 1, 2)]
+        [InlineData(1, 0, 2)]
+        [InlineData(1, 1, 0)]
+        public async Task Handle_Should_Throw_Exception_For_Invalid_Command(int flightId, int passengerId, int seatCount)
+        {
+            // Arrange
+            var command = new CreateBookingCommand
+            {
+                FlightId = flightId,
+                PassengerId = passengerId,
+                SeatCount = seatCount
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
+            _flightRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<int>()), Times.Never);
+            _passengerRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<int>()), Times.Never);
+            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
         }
     }
 }

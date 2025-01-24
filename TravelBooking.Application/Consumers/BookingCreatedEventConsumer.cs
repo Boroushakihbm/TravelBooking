@@ -26,9 +26,9 @@ namespace TravelBooking.Application.Consumers
             var passenger = await _passengerRepository.GetByIdAsync(@event.PassengerId);
 
             if (flight == null || passenger == null)
-                throw new Exception("Flight or Passenger not found.");
+                throw new KeyNotFoundException("Flight or Passenger not found.");
             if (flight.AvailableSeats == 0 || (flight.AvailableSeats - @event.SeatCount) < 0)
-                throw new Exception("Flight Not Available Seat.");
+                throw new KeyNotFoundException("Flight Not Available Seat.");
 
             var booking = new Domain.Entities.Booking()
             {

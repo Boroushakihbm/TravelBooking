@@ -28,13 +28,14 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
         var passenger = await _passengerRepository.GetByIdAsync(request.PassengerId);
 
         if (flight == null || passenger == null)
-            throw new Exception("Flight or Passenger not found.");
+            throw new KeyNotFoundException("Flight or Passenger not found.");
         if (flight.AvailableSeats == 0 || (flight.AvailableSeats - request.SeatCount) < 0)
-            throw new Exception("Flight Not Available Seat.");
+            throw new KeyNotFoundException("Flight Not Available Seat.");
 
         var bookingCreated = Domain.Entities.Booking.Create(request.FlightId, request.PassengerId, DateTime.Now, request.SeatCount);
         var response = await _client.GetResponse<BookingCreatedEventResponse>(bookingCreated.Item2);
-        bookingCreated.Item1.Id = response.Message.BookingId;
+        if (response.Message != null)
+            bookingCreated.Item1.Id = response.Message.BookingId;
         return bookingCreated.Item1;
     }
 }
