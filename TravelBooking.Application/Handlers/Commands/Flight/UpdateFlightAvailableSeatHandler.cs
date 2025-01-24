@@ -18,7 +18,7 @@ public class UpdateFlightAvailableSeatHandler : IRequestHandler<UpdateFlightAvai
         var flight = await _repository.GetByFlightNumberAsync(request.FlightNumber);
 
         if (flight == null)
-            throw new Exception("Flight NotFound");
+            throw new KeyNotFoundException("Flight NotFound");
 
         flight.AvailableSeats = request.AvailableSeats;
         await _repository.UpdateAsync(flight);
