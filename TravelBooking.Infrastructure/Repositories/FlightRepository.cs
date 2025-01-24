@@ -33,7 +33,7 @@ public class FlightRepository : IFlightRepository
                 _cache.Set($"Flight_{id}", flight, _cacheOptions);
             }
         }
-        return flight;
+        return flight ?? throw new KeyNotFoundException("Flight not found");
     }
 
     public async Task<IEnumerable<Flight>> GetAllAsync()

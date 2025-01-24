@@ -2,7 +2,7 @@
 
 public class BookingDTO
 {
-    public int? Id { get; set; }
+    public Guid? Id { get; set; }
     public DateTime? BookingDate { get; set; }
     public int? SeatCount { get; set; }
 

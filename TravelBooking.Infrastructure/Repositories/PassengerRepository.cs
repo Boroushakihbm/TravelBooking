@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TravelBooking.Common.Exceptions;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infrastructure.mssql.Persistence;
@@ -16,7 +17,7 @@ public class PassengerRepository : IPassengerRepository
 
     public async Task<Passenger> GetByIdAsync(int id)
     {
-        return await _context.Passengers.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new InvalidOperationException("Passenger not found");
+        return await _context.Passengers.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new KeyNotFoundException("Passenger not found");
     }
 
     public async Task<IEnumerable<Passenger>> GetAllAsync()

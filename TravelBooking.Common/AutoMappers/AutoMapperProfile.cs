@@ -8,13 +8,19 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<dynamic, BookingDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom((src, dest) => ConvertToNullableInt(src, "Id")))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom((src, dest) => ConvertToNullableGuid(src, "Id")))
             .ForMember(dest => dest.SeatCount, opt => opt.MapFrom((src, dest) => ConvertToNullableInt(src, "SeatCount")))
             .ForMember(dest => dest.Origin, opt => opt.MapFrom((src, dest) => ConvertToNullableString(src, "Origin")))
             .ForMember(dest => dest.Destination, opt => opt.MapFrom((src, dest) => ConvertToNullableString(src, "Destination")))
             .ForMember(dest => dest.DepartureTime, opt => opt.MapFrom((src, dest) => ConvertToNullableDateTime(src, "DepartureTime")))
             .ForMember(dest => dest.FullName, opt => opt.MapFrom((src, dest) => ConvertToNullableString(src, "FullName")))
             .ForMember(dest => dest.BookingDate, opt => opt.MapFrom((src, dest) => ConvertToNullableDateTime(src, "BookingDate")));
+    }
+
+    private Guid? ConvertToNullableGuid(dynamic source, string propertyName)
+    {
+        var value = GetPropertyValue(source, propertyName);
+        return value != null ? (Guid)value : null;
     }
 
     private int? ConvertToNullableInt(dynamic source, string propertyName)

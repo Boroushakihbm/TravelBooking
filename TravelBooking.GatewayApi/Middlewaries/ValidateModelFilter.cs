@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Collections.Generic;
 using System.Text.Json;
+using TravelBooking.Common.Exceptions;
 
 namespace TravelBooking.GatewayApi.Middlewaries
 {
@@ -23,20 +24,5 @@ namespace TravelBooking.GatewayApi.Middlewaries
 
             await next();
         }
-    }
-}
-public class ValidationExceptionList : Exception
-{
-    public new string? Message { get; }
-    public List<string> Errors { get; }
-
-    public ValidationExceptionList(List<string> errors)
-    {
-        Errors = errors;
-    }
-    public ValidationExceptionList(string message, List<string> errors)
-    {
-        Message = message;
-        Errors = errors;
     }
 }

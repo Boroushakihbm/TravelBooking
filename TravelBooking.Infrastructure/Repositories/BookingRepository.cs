@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Threading;
 using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infrastructure.mssql.Persistence;
@@ -18,7 +16,7 @@ public class BookingRepository : IBookingRepository
 
     public async Task<Booking> GetByIdAsync(Guid id)
     {
-        return await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new InvalidOperationException("Booking not found");
+        return await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ?? throw new KeyNotFoundException("Booking not found");
     }
 
     public async Task<IEnumerable<Booking>> GetAllAsync()
