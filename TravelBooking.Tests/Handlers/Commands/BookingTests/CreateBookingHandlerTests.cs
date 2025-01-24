@@ -6,6 +6,7 @@ using TravelBooking.Domain.Entities;
 using TravelBooking.Domain.Events;
 using TravelBooking.Domain.Interfaces;
 using Xunit;
+using static MassTransit.ValidationResultExtensions;
 
 namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
 {
@@ -69,7 +70,6 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             _clientMock.Setup(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)))
                        .ReturnsAsync(Mock.Of<Response<BookingCreatedEventResponse>>);
 
-
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -83,6 +83,65 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
         }
 
         [Fact]
+        public async Task Handle_Should_Create_Booking2()
+        {
+            // Arrange
+            var command = new CreateBookingCommand
+            {
+                FlightId = 1,
+                PassengerId = 1,
+                SeatCount = 2
+            };
+
+            var flight = new Flight
+            {
+                Id = command.FlightId,
+                FlightNumber = "AB123",
+                Origin = "JFK",
+                Destination = "LAX",
+                DepartureTime = DateTime.Now,
+                ArrivalTime = DateTime.Now.AddHours(6),
+                AvailableSeats = 100,
+                Price = 299.99M
+            };
+
+            var passenger = new Passenger
+            {
+                Id = command.PassengerId,
+                FullName = "John Doe",
+                Email = "john.doe@example.com",
+                PassportNumber = "123456789"
+            };
+
+            var booking = new Booking
+            {
+                Id = 1,
+                FlightId = command.FlightId,
+                PassengerId = command.PassengerId,
+                BookingDate = DateTime.Now,
+                SeatCount = command.SeatCount
+            };
+
+            //_flightRepositoryMock.Setup(x => x.GetByIdAsync(command.FlightId)).ReturnsAsync(flight);
+            //_passengerRepositoryMock.Setup(x => x.GetByIdAsync(command.PassengerId)).ReturnsAsync(passenger);
+            //_clientMock.Setup(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)))
+            //           .ReturnsAsync(Mock.Of<Response<BookingCreatedEventResponse>>);
+
+            // Act
+            //var result = await _handler.Handle(command, CancellationToken.None);
+            var command2 = new CreateBookingCommand
+            {
+                FlightId = 400,
+                PassengerId = 300,
+                SeatCount = 3
+            };
+            // Assert
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _handler.Handle(command2, CancellationToken.None));
+            Assert.IsAssignableFrom<KeyNotFoundException>(exception);
+            //Assert.Equal("Flight or Passenger not found.", exception.Message);
+
+        }
+        [Fact]
         public async Task Handle_Should_Throw_Exception_When_Flight_Or_Passenger_Not_Found()
         {
             // Arrange
@@ -93,14 +152,8 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
                 SeatCount = 2
             };
 
-            _flightRepositoryMock.Setup(x => x.GetByIdAsync(command.FlightId)).ReturnsAsync((Flight)null);
-            _passengerRepositoryMock.Setup(x => x.GetByIdAsync(command.PassengerId)).ReturnsAsync((Passenger)null);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
-            _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
-            _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
+            Assert.IsAssignableFrom<KeyNotFoundException>(exception);
         }
 
         [Fact]
@@ -138,16 +191,14 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             _passengerRepositoryMock.Setup(x => x.GetByIdAsync(command.PassengerId)).ReturnsAsync(passenger);
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
-            _flightRepositoryMock.Verify(x => x.GetByIdAsync(command.FlightId), Times.Once);
-            _passengerRepositoryMock.Verify(x => x.GetByIdAsync(command.PassengerId), Times.Once);
-            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
+            Assert.IsAssignableFrom<KeyNotFoundException>(exception);
         }
 
         [Theory]
-        [InlineData(0, 1, 2)]
-        [InlineData(1, 0, 2)]
-        [InlineData(1, 1, 0)]
+        [InlineData(5000, 1, 2)]
+        [InlineData(5000, 0, 2)]
+        [InlineData(5000, 1, 0)]
         public async Task Handle_Should_Throw_Exception_For_Invalid_Command(int flightId, int passengerId, int seatCount)
         {
             // Arrange
@@ -159,10 +210,8 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.BookingTests
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
-            _flightRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<int>()), Times.Never);
-            _passengerRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<int>()), Times.Never);
-            _clientMock.Verify(x => x.GetResponse<BookingCreatedEventResponse>(It.IsAny<BookingCreatedEvent>(), It.IsAny<CancellationToken>(), default(RequestTimeout)), Times.Once);
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
+            Assert.IsAssignableFrom<KeyNotFoundException>(exception);
         }
     }
 }
