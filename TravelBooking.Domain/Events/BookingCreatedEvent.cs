@@ -17,4 +17,11 @@
             SeatCount = seatCount;
         }
     }
+
+    public class CreateBookingResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public Guid BookingId { get; set; }
+    }
 }

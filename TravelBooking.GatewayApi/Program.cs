@@ -46,7 +46,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<BookingCreatedEventConsumer>();
-
+    
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq://localhost");
@@ -56,8 +56,6 @@ builder.Services.AddMassTransit(x =>
         });
     });
 });
-
-
 
 var app = builder.Build();
 

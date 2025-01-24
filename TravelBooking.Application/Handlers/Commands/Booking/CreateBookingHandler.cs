@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using MediatR;
 using TravelBooking.Common.Commands.Booking;
+using TravelBooking.Domain.Events;
 using TravelBooking.Domain.Interfaces;
 
 namespace TravelBooking.Application.Handlers.Commands.Booking;
@@ -10,15 +11,19 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
     private readonly IFlightRepository _flightRepository;
     private readonly IPassengerRepository _passengerRepository;
     private readonly IBus _bus;
+    private readonly IRequestClient<BookingCreatedEvent> _client;
+
     public CreateBookingHandler(IFlightRepository flightRepository, 
                                 IPassengerRepository passengerRepository,
-                                IBus bus)
+                                IBus bus,
+                                IRequestClient<BookingCreatedEvent> client)
     {
         _flightRepository = flightRepository;
         _passengerRepository = passengerRepository;
         _bus = bus;
+        _client = client;
     }
-
+   
     public async Task<Domain.Entities.Booking> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
 
@@ -31,7 +36,7 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Domain
             throw new Exception("Flight Not Available Seat.");
 
         var bookingCreated = Domain.Entities.Booking.Create(request.FlightId, request.PassengerId, DateTime.Now, request.SeatCount);
-        await _bus.Publish(bookingCreated.Item2);
+        var response = await _client.GetResponse<CreateBookingResponse>(bookingCreated.Item2);
 
         return bookingCreated.Item1;
     }
