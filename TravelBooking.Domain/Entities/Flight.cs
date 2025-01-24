@@ -1,5 +1,7 @@
-﻿namespace TravelBooking.Domain.Entities;
-public class Flight
+﻿using TravelBooking.Domain.IRepository;
+
+namespace TravelBooking.Domain.Entities;
+public class Flight: IRootEntity
 {
     public int Id { get; set; }
     public string FlightNumber { get; set; } = string.Empty;

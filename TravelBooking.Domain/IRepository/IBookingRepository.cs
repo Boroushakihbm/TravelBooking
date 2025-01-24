@@ -1,13 +1,11 @@
-﻿using System.Linq.Expressions;
-using TravelBooking.Domain.Entities;
+﻿using TravelBooking.Domain.Entities;
+using TravelBooking.Domain.IRepository;
 
 namespace TravelBooking.Domain.Interfaces;
 
-public interface IBookingRepository { 
-    Task<Booking> GetByIdAsync(int id); 
-    Task<IEnumerable<Booking>> GetAllAsync();
-    Task<IEnumerable<dynamic>> GetBookingsAsync(string flightNumber, int take, int skip);
-    Task AddAsync(Booking booking); 
-    Task UpdateAsync(Booking booking); 
-    Task DeleteAsync(int id); 
+public interface IBookingRepository : IGenericRepository<Booking>
+{
+    Task<IEnumerable<Booking>?> GetAllAsync(CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<dynamic>> GetBookingsAsync(string flightNumber, int take, int skip, CancellationToken cancellationToken = default);
 }

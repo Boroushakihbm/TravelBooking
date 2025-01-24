@@ -1,11 +1,10 @@
 ﻿using TravelBooking.Domain.Entities;
+using TravelBooking.Domain.IRepository;
 
 namespace TravelBooking.Domain.Interfaces;
 
-public interface IPassengerRepository { 
-    Task<Passenger> GetByIdAsync(int id); 
-    Task<IEnumerable<Passenger>> GetAllAsync(); 
-    Task AddAsync(Passenger passenger); 
-    Task UpdateAsync(Passenger passenger); 
-    Task DeleteAsync(int id); 
+public interface IPassengerRepository : IGenericRepository<Passenger>
+{
+    Task<IEnumerable<Passenger>?> GetAllAsync(CancellationToken cancellationToken = default);
+
 }
