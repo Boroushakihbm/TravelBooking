@@ -17,6 +17,9 @@ TravelBooking is a .NET 8.0 based application for managing travel bookings. This
 - **TravelBooking.Infrastructure**: Contains data access logic and repositories.
 - **TravelBooking.Common**: Contains common utilities, validators, and DTOs.
 
+![BadRequest Sample](https://github.com/Boroushakihbm/TravelBooking/blob/master/readmeimg/BadRequest.PNG)
+![xUnitTest](https://github.com/Boroushakihbm/TravelBooking/blob/master/readmeimg/xUnitTest.PNG)
+![RabbitMQ](https://github.com/Boroushakihbm/TravelBooking/blob/master/readmeimg/RabbitMQ.PNG)
 ## Setup Instructions
 
 ### 1. Clone the Repository
