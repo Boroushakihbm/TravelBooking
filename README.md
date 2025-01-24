@@ -9,7 +9,7 @@ TravelBooking is a .NET 8.0 based application for managing travel bookings. This
 - Visual Studio 2022
 - Docker
 
-## Project Structure (`DDD` - `CQRS` - Event Sourcing by `RabbitMQ`)
+## Project Structure (`DDD` - `CQRS` - Event Sourcing by `RabbitMQ` and `MassTransit`)
 
 - **TravelBooking.GatewayApi**: The API gateway for handling HTTP requests.
 - **TravelBooking.Application**: Contains application logic and handlers.
