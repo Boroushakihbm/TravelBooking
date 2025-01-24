@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using TravelBooking.Common.Exceptions;
 
 namespace TravelBooking.GatewayApi.Middlewaries;
 
@@ -32,6 +33,7 @@ public class ExceptionHandlingMiddleware
 
         context.Response.StatusCode = exception switch
         {
+            ValidationExceptionList => StatusCodes.Status400BadRequest,
             ApplicationException => StatusCodes.Status400BadRequest,
             KeyNotFoundException => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status500InternalServerError
