@@ -44,13 +44,13 @@ namespace TravelBooking.Application.Tests.Handlers.Commands.FlightTests
                 Price = command.Price
             };
 
-            _flightRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Flight>())).Callback<Flight>(f => f.Id = flight.Id).Returns(Task.CompletedTask);
+            _flightRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Flight>(), CancellationToken.None)).Callback<Flight>(f => f.Id = flight.Id).Returns(Task.CompletedTask);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _flightRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Flight>()), Times.Once);
+            _flightRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Flight>(), CancellationToken.None), Times.Once);
             Assert.NotNull(result);
             Assert.True(result.Id > 0);
         }
